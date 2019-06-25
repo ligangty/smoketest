@@ -17,7 +17,7 @@ prepare()
     dest_tar=$3
     if [ ! -f $GITDIR/$repo/pom.xml ];
     then
-        git clone git@github.com:ligangty/$repo.git $GITDIR/$repo
+        git clone https://github.com/ligangty/$repo.git $GITDIR/$repo
     fi
     cd $GITDIR/$repo
     git fetch origin 
@@ -28,9 +28,6 @@ prepare()
 }
 
 prepare indy $GITDIR/indy/deployments/launcher/target/indy-launcher-*-complete.tar.gz $INDYDIR/pkg/indy.tar.gz
-cd $INDYDIR
-docker build -t commonjava/smoke-indy:latest .
-
 prepare auditquery $GITDIR/auditquery/deployments/standalone-rest/target/auditquery-standalone-rest-*.tar.gz $AQDIR/pkg/auditquery.tar.gz
-cd $AQDIR
-docker build -t commonjava/smoke-aq:latest .
+
+docker-compose up
