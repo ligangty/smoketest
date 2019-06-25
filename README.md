@@ -8,7 +8,7 @@
   * docker-compose
 
 ## Notes
-  * This project is using my local repo of indy & auditquery with "changelog" branch, because currently these two project does not support ispn configuration overriding with customized ways. When this overriding is support in future, will switch to upstream git.
+  * This project is using my owned repos of indy & auditquery with "changelog" branch, because currently these two project does not support ispn configuration overriding with customized ways. When this overriding is support in future, will switch to upstream git.
 
 ## Steps
   * Run prepare.sh: will download two projects and build, then use prepared docker build env to build docker file
