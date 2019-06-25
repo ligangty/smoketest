@@ -17,6 +17,7 @@ COPY pkg/indy.tar.gz /tmp/indy.tar.gz
 RUN tar -zxf /tmp/indy.tar.gz -C /opt && rm /tmp/indy.tar.gz
 
 COPY etc/indy/conf.d/infinispan-cluster.conf /opt/indy/etc/indy/conf.d/infinispan-cluster.conf
+COPY etc/indy/conf.d/repo-changelog.conf /opt/indy/etc/indy/conf.d/repo-changelog.conf
 COPY etc/indy/infinispan-cluster.xml /opt/indy/etc/indy/infinispan-cluster.xml
 COPY etc/indy/jgroups-tcp.xml /opt/indy/etc/indy/jgroups-tcp.xml
 
