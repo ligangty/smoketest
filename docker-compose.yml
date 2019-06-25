@@ -1,0 +1,10 @@
+version: '3'
+services: 
+  indy:
+    image: "commonjava/smoke-indy:latest"
+    ports:
+      - "8080:8080"
+  auditquery:
+    image: "commonjava/smoke-aq:latest"
+    ports:
+      - "8082:8082"
