@@ -15,7 +15,7 @@
             thread_pool.keep_alive_time="60000"
     />
 
-    <TUNNEL gossip_router_hosts="${jgroups.gossip_router_hosts:HostA[12001],HostB[12001]}" />
+    <TUNNEL gossip_router_hosts="0.0.0.0[12001]" />
     <PING />
 
     <MERGE3 min_interval="10000"

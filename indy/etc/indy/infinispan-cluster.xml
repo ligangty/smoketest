@@ -5,20 +5,16 @@
             xmlns="urn:infinispan:config:9.4"
             xmlns:jdbc="urn:infinispan:config:store:jdbc:9.4">
 
-  <!--
   <jgroups>
-    <stack-file name="external-file" path="jgroups-tcp.xml" />
+    <stack-file name="external-file" path="${indy.home}/etc/indy/jgroups-tcp.xml" />
   </jgroups>
-  -->
 
   <cache-container name="IndyClusterCacheManager" shutdown-hook="DEFAULT" statistics="true">
-    <transport cluster="indy-cluster"/>
+    <transport stack="external-file" cluster="indy-cluster"/>
 
     <distributed-cache name="event-audit"/>
 
-    <distributed-cache name="repo-change">
-      
-    </distributed-cache>
+    <distributed-cache name="repo-change" />
     
   </cache-container>
 

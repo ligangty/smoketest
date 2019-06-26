@@ -30,4 +30,5 @@ prepare()
 prepare indy $GITDIR/indy/deployments/launcher/target/indy-launcher-*-complete.tar.gz $INDYDIR/pkg/indy.tar.gz
 prepare auditquery $GITDIR/auditquery/deployments/standalone-rest/target/auditquery-standalone-rest-*.tar.gz $AQDIR/pkg/auditquery.tar.gz
 
+docker-compose build 
 docker-compose up

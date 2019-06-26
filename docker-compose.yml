@@ -1,5 +1,11 @@
 version: '3'
 services: 
+  jboss-gossip:
+    image: "jboss/jgroups-gossip:latest"
+    ports:
+      - "12001:12001"
+    environment:
+      - LogLevel=TRACE
   indy:
     build: ./indy
     image: "commonjava/smoke-indy:latest"
