@@ -1,0 +1,30 @@
+{
+    "type" : "remote",
+    "key" : "maven:remote:rtest",
+    "metadata" : {
+      "changelog" : "Init rtest repo"
+    },
+    "disabled" : false,
+    "host" : "repo1.maven.org",
+    "port" : 80,
+    "packageType" : "maven",
+    "name" : "rtest",
+    "disable_timeout" : -1,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "allow_snapshots" : true,
+    "allow_releases" : true,
+    "url" : "http://repo1.maven.org/maven2/",
+    "timeout_seconds" : 180,
+    "max_connections" : 30,
+    "ignore_hostname_verification" : false,
+    "nfc_timeout_seconds" : 0,
+    "is_passthrough" : false,
+    "cache_timeout_seconds" : 0,
+    "metadata_timeout_seconds" : 86400,
+    "proxy_port" : 0,
+    "prefetch_priority" : 0,
+    "prefetch_rescan" : false,
+    "prefetch_listing_type" : "html"
+  }
+  

@@ -33,4 +33,4 @@ prepare indy $GITDIR/indy/deployments/launcher/target/indy-launcher-*-complete.t
 prepare auditquery $GITDIR/auditquery/deployments/standalone-rest/target/auditquery-standalone-rest-*.tar.gz $AQDIR/pkg/auditquery.tar.gz
 
 docker-compose build 
-nohup docker-compose up > $BASEDIR/compose.log 2>&1
+nohup docker-compose up > $BASEDIR/compose.log 2>&1 &

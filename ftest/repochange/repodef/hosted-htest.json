@@ -1,0 +1,18 @@
+{
+  "type" : "hosted",
+  "key" : "maven:hosted:htest",
+  "description": "Test hosted for repo change testing",
+  "metadata" : {
+    "changelog" : "Initial setup"
+  },
+  "disabled" : false,
+  "snapshotTimeoutSeconds" : 0,
+  "readonly" : false,
+  "packageType" : "maven",
+  "name" : "htest",    
+  "disable_timeout" : 0,
+  "path_style" : "plain",
+  "authoritative_index" : false,
+  "allow_snapshots" : true,
+  "allow_releases" : true
+}

@@ -1,0 +1,17 @@
+{
+    "type" : "group",
+    "key" : "maven:group:gtest",
+    "description" : "Test group",
+    "metadata" : {
+      "changelog" : "Init gtest"
+    },
+    "disabled" : false,
+    "constituents" : [ "maven:hosted:htest", "maven:group:rtest" ],
+    "packageType" : "maven",
+    "name" : "gtest",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "prepend_constituent" : false
+  }
+  
