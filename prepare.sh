@@ -34,3 +34,5 @@ prepare auditquery $GITDIR/auditquery/deployments/standalone-rest/target/auditqu
 
 docker-compose build 
 nohup docker-compose up > $BASEDIR/compose.log 2>&1 &
+
+echo 'indy & auditquery initializing, see compose.log for status'
