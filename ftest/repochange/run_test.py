@@ -48,10 +48,11 @@ def prepareCreate(repo_data):
 
 def prepareUpdate(repo_data):
   (repo_key, repo_name, repo_type, package_type) = (repo_data["key"], repo_data["name"], repo_data["type"], repo_data["packageType"])
-  if(repo_data["description"] is None):
-    repo_data["description"] = repo_key + " Updated"
-  else:
+  if("description" in repo_data):
     repo_data["description"] = repo_data["description"] + " Updated"
+  else:
+    repo_data["description"] = repo_key + " Updated"
+  repo_data["metadata"]["changelog"]="Update repo description"
   url = 'http://localhost:8080/api/admin/stores/%s/%s/%s' % (package_type, repo_type, repo_name)
   headers = {'Content-type': 'application/json'}
   jsonstring = json.dumps(repo_data)
@@ -62,17 +63,18 @@ def prepareUpdate(repo_data):
 
 def prepareDelete(repo_data):
   (repo_key, repo_name, repo_type, package_type) = (repo_data["key"], repo_data["name"], repo_data["type"], repo_data["packageType"])
+  headers = {'changelog': 'Delete test repo %s' % repo_key}
   url = 'http://localhost:8080/api/admin/stores/%s/%s/%s' % (package_type, repo_type, repo_name)
   print("Start deleting %s" % repo_key)
-  r = requests.delete(url)
+  r = requests.delete(url, headers=headers)
   assert http_ok(r.status_code), fail('%s deleting failed. Status: %s, Error: %s' % (repo_key, r.status_code, r.reason))
-  print('%s created successfully' % repo_key)
+  print('%s deleted successfully' % repo_key)
 
         
 """
 Verify summary stats function, do these:
   1. Access rest api and get data back
-  2. Verify if there are 3 entries
+  2. Verify if 3 entries for test repos are there
   3. Verify if the count for different status of each test repo is correct.
   4. Verify if the total count of each test repo is correct.
 """
@@ -82,14 +84,9 @@ def verifyStats():
   r = requests.get(url,headers=headers)
   assert http_ok(r.status_code), fail('Stats validation failed. Error: %s' % r.reason)
   print(ok("Summary stats REST api access validation passed!"))
-  
-  data = r.json()
-  # 2.Verify if 3 entries in stats
-  EXPECTED_ENTRY_COUNT = 3
-  assert len(data)==EXPECTED_ENTRY_COUNT, "Stats should contains %s entries but %s entries" % (EXPECTED_ENTRY_COUNT, len(data))
-  print(ok("Summary stats total entries count validation passed!"))
-
+     
   # 2. Verify if 3 entries for test repos are there
+  data = r.json()
   (test_remote, test_hosted, test_group)=(None, None, None)    
   for r in data:
     if (r["storeKey"]=="maven:hosted:htest"):
@@ -119,12 +116,15 @@ def verifyCount(repo_sum_stats):
   assert total == TOTAL_COUNT, fail("%s summary stats total count not correct, expect: %s, actual: %s" % (key, TOTAL_COUNT, total))
   print(ok("Repo summary stats validation for %s passed!" % key))
 
+
+
 """
 Verify change summary entrypoint for store. Do following:
   1. Access summary by store rest endpoint for one or more stores.
   2. Verify if the summary entries count is correct for the specified store.
 """
 def verifySummaries(repos):
+  eventIds=[]
   for key in repos:
     repo_data = repos[key]
     (repo_name, repo_type, package_type) = (repo_data["name"], repo_data["type"], repo_data["packageType"])
@@ -132,12 +132,17 @@ def verifySummaries(repos):
     headers = {'Content-type': 'application/json'}
     jsonstring = json.dumps(repo_data)
     r = requests.get(url,headers=headers)
-    if(http_ok(r.status_code)):
-      data = r.json()       
-      #TODO: verify if summary entries count is correct
-      continue
-    else:
-      print('Validation failed for %s, Error: %s' % (key, r.reason))
+    assert http_ok(r.status_code), fail('Summary by store validation failed. Error: %s' % r.reason)
+    print(ok("Summary by store REST api access for %s validation passed!"%key))
+    data = r.json()
+    assert "items" in data, fail("Summary by store validation for %s failed. Reason: no items contained" % key)
+    EXPECTED_ENTRIES = 3
+    items = data["items"]
+    assert len(items)==EXPECTED_ENTRIES, fail("Summary by store entries count validation for %s failed. Expected: %s, Actual: %s" % (key, EXPECTED_ENTRIES, len(items)))
+    print(ok("Summary by store entries count for %s validation passed!"%key))
+    for e in items:
+      eventIds.append(e["eventId"])
+  return eventIds
 
 
 """
@@ -145,19 +150,21 @@ Verify if single change event is correct. Do following:
   1. Access single change event by event id rest endpoint.
   2. Verify if the returned change event contains enough information.
 """
-def verifyChangeEvent(eventId):
-  url = 'http://localhost:8082/api/rest/history/stores/change/%s' % (eventId)
-  headers = {'Content-type': 'application/json'}
-  r = requests.get(url,headers=headers)
-  if(http_ok(r.status_code)):
+def verifyChangeEvents(eventIds):
+  for eventId in eventIds:
+    url = 'http://localhost:8082/api/rest/history/stores/change/%s' % (eventId)
+    headers = {'Content-type': 'application/json'}
+    r = requests.get(url,headers=headers)
+    assert http_ok(r.status_code), fail('Validation failed for event %s, Error: %s' % (eventId, r.reason))
     data = r.json()       
-    #TODO: verify if change event data contains enough information
-  else:
-    print('Validation failed for event %s, Error: %s' % (eventId, r.reason))
+    for item in ["eventId","storeKey","changeTime","version","summary","changeType","user","diffContent"]:
+      assert item in data, fail("Change event result missed %s of event %s"%(item, eventId))
+  print(ok("EventId access and result validation passed!"))
 
 
 repos = collect_repos()
-
 prepare(repos)
 verifyStats()
+eventIds = verifySummaries(repos)
+verifyChangeEvents(eventIds)
 
