@@ -17,14 +17,14 @@ prepare()
     dest_tar=$3
     if [ ! -f $GITDIR/$repo/pom.xml ];
     then
-        git clone https://github.com/Commonjava/$repo.git $GITDIR/$repo
+        git clone https://github.com/ligangty/$repo.git $GITDIR/$repo
     fi
     cd $GITDIR/$repo
     git fetch origin 
-    # git checkout changelog
-    # git reset --hard origin/changelog
-    git checkout master
-    git reset --hard origin/master
+    git checkout changelog
+    git reset --hard origin/changelog
+    # git checkout master
+    # git reset --hard origin/master
     mvn clean install -DskipTests
     cp $src_tar $dest_tar    
 }
