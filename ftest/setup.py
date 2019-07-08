@@ -16,7 +16,7 @@
 #
 
 
-from setuptools import setup, find_packages
+from setuptools import setup
 import sys
 
 # handle python 3
@@ -36,15 +36,7 @@ setup(
     author_email='gli@redhat.com',
     url='https://github.com/ligangty/smoketest',
     license='APL2',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     install_requires=[
-      "requests",
-      "Jinja2"
+      "requests"
     ]
-    # entry_points={
-    #   'console_scripts': [
-    #     'multibuild = mb:build',
-    #     'multicheck = mb:check',
-    #   ],
-    # }
 )
